@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "mongoose": "^8.8.2",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
