@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { MessageSchema, Message } from "./message.model";
+import mongoose, { Schema, Document, CallbackError } from "mongoose";
+import bcrypt from "bcrypt";
 
-export interface User extends Document {
+export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
@@ -9,36 +9,36 @@ export interface User extends Document {
   verifyCodeExpiry: Date;
   isVerified: boolean;
   isAcceptingMessage: boolean;
-  messages: Message[];
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-export const UserSchema: Schema<User> = new Schema({
+export const UserSchema: Schema<IUser> = new Schema({
   username: {
     type: String,
-    required: [true, "username is required."],
+    required: [true, "Username is required."],
     unique: true,
     trim: true,
   },
   email: {
     type: String,
-    required: [true, "email is required."],
+    required: [true, "Email is required."],
     unique: true,
     match: [
-      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
-      "please enter a valid email address.",
+      /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i,
+      "Please enter a valid email address.",
     ],
   },
   password: {
     type: String,
-    required: [true, "password is required."],
+    required: [true, "Password is required."],
   },
   verifyCode: {
     type: String,
-    required: [true, "verify code is required."],
+    required: [true, "Verify code is required."],
   },
   verifyCodeExpiry: {
     type: Date,
-    required: [true, "verify code expiry date is required."],
+    required: [true, "Verify code expiry date is required."],
   },
   isVerified: {
     type: Boolean,
@@ -48,11 +48,33 @@ export const UserSchema: Schema<User> = new Schema({
     type: Boolean,
     default: true,
   },
-  messages: [MessageSchema],
 });
 
+// **Hash Password Before Saving**
+UserSchema.pre<IUser>(
+  "save",
+  async function (next: (err?: CallbackError) => void) {
+    if (!this.isModified("password")) return next();
+    try {
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
+      next();
+    } catch (err) {
+      next(err as CallbackError);
+    }
+  }
+);
+
+// **Password Comparison Method**
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// **Model Export**
 const UserModel =
-  (mongoose.models.User as mongoose.Model<User>) ||
-  mongoose.model<User>("User", UserSchema);
+  (mongoose.models.User as mongoose.Model<IUser>) ||
+  mongoose.model<IUser>("User", UserSchema);
 
 export default UserModel;
