@@ -1,5 +1,10 @@
 # Anonymous Feedback a Simple NextJS Project (Under Development) 
 
+## Basic System Design:
+
+![image](https://github.com/user-attachments/assets/38457569-a7e2-4140-8583-1db8395af5a2)
+
+
 ## Setup locally:
 
 1. Git clone:
