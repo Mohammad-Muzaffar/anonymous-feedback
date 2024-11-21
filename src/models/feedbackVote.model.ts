@@ -1,11 +1,11 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IFeedbackVote extends Document {
-  feedbackId: Types.ObjectId; // Reference to the Feedback
-  ipAddress: string; // IP address of the voter
-  userToken: string; // Unique token identifying the user (generated on first visit)
-  voteType: "upvote" | "downvote"; // Type of vote
-  createdAt: Date; // Timestamp for when the vote was created
+  feedbackId: Types.ObjectId;
+  ipAddress: string;
+  userToken: string;
+  voteType: "upvote" | "downvote";
+  createdAt: Date;
 }
 
 const FeedbackVoteSchema: Schema<IFeedbackVote> = new Schema(
@@ -15,25 +15,12 @@ const FeedbackVoteSchema: Schema<IFeedbackVote> = new Schema(
       ref: "Feedback",
       required: true,
     },
-    ipAddress: {
-      type: String,
-      required: true,
-    },
-    userToken: {
-      type: String,
-      required: true,
-    },
-    voteType: {
-      type: String,
-      enum: ["upvote", "downvote"],
-      required: true,
-    },
+    ipAddress: { type: String, required: true },
+    userToken: { type: String, required: true },
+    voteType: { type: String, enum: ["upvote", "downvote"], required: true },
   },
   {
-    timestamps: {
-      createdAt: true,
-      updatedAt: false,
-    },
+    timestamps: true,
   }
 );
 
@@ -44,7 +31,6 @@ FeedbackVoteSchema.index(
 );
 
 const FeedbackVoteModel =
-  (mongoose.models.FeedbackVote as mongoose.Model<IFeedbackVote>) ||
+  mongoose.models.FeedbackVote ||
   mongoose.model<IFeedbackVote>("FeedbackVote", FeedbackVoteSchema);
-
 export default FeedbackVoteModel;

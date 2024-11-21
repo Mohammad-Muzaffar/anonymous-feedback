@@ -1,41 +1,36 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IFeedback extends Document {
-  postId: Types.ObjectId; // Reference to the Post
-  content: string; // Feedback content
-  createdAt: Date; // Timestamp for when feedback was created
-  votes: Types.ObjectId[]; // Array of references to FeedbackVote
+  postId: Types.ObjectId;
+  content: string;
+  votes: Types.ObjectId[];
+  sentiment: "positive" | "neutral" | "negative"; // Sentiment assigned to this feedback
+  voteCount: {
+    upvotes: number;
+    downvotes: number;
+  };
 }
 
 const FeedbackSchema: Schema<IFeedback> = new Schema(
   {
-    postId: {
-      type: Schema.Types.ObjectId,
-      ref: "Post",
-      required: true,
-    },
-    content: {
+    postId: { type: Schema.Types.ObjectId, ref: "Post", required: true },
+    content: { type: String, required: true, trim: true },
+    votes: [{ type: Schema.Types.ObjectId, ref: "FeedbackVote" }],
+    sentiment: {
       type: String,
-      required: true,
-      trim: true,
+      enum: ["positive", "neutral", "negative"],
     },
-    votes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "FeedbackVote",
-      },
-    ],
+    voteCount: {
+      upvotes: { type: Number, default: 0 },
+      downvotes: { type: Number, default: 0 },
+    },
   },
   {
-    timestamps: {
-      createdAt: true,
-      updatedAt: false,
-    },
+    timestamps: true,
   }
 );
 
 const FeedbackModel =
-  (mongoose.models.Feedback as mongoose.Model<IFeedback>) ||
+  mongoose.models.Feedback ||
   mongoose.model<IFeedback>("Feedback", FeedbackSchema);
-
 export default FeedbackModel;
