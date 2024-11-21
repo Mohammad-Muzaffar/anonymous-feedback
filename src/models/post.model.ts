@@ -7,6 +7,7 @@ export interface IPost extends Document {
   link: string; // Shareable link for the post
   likes: number; // Total likes for the post
   dislikes: number; // Total dislikes for the post
+  isAcceptingFeedback: boolean;
   feedbacks: Types.ObjectId[]; // Array of feedback IDs
   createdAt: Date; // Timestamp for when the post was created
   updatedAt: Date; // Timestamp for when the post was last updated
@@ -40,6 +41,10 @@ const PostSchema: Schema<IPost> = new Schema(
     dislikes: {
       type: Number,
       default: 0,
+    },
+    isAcceptingFeedback: {
+      type: Boolean,
+      default: true,
     },
     feedbacks: [
       {
