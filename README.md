@@ -2,6 +2,8 @@
 
 A **Next.js** platform where users can create posts/questions/opinions and share a unique link to gather honest and anonymous feedback. The platform utilizes analytics powered by **OpenAI models** to provide insights on feedback, enabling users to make informed decisions based on true, unbiased responses.  
 
+> **Warning**
+> This app is a work in progress. I'm building this in public. 
 ---
 
 ## Features ✨  
@@ -21,7 +23,6 @@ A **Next.js** platform where users can create posts/questions/opinions and share
 - **Email Service**: [Render.com](https://render.com/)  
 - **UI Components**: [shadcn/ui](https://shadcn.dev/)  
 - **AI Integration**: [OpenAI API](https://openai.com/api/)  
- - **Still in early stage of development**
 
 ---
 
@@ -108,8 +109,8 @@ For questions, suggestions, or discussions, feel free to reach out!
 
 ## Acknowledgements 🏆  
 We extend our gratitude to the following individuals for their inspiration and guidance:  
-- [Hitesh Choudhary](https://github.com/hiteshchoudhary)  
-- [Harkirat Singh](https://github.com/hkirat)  
+- [Hitesh Choudhary](https://github.com/hiteshchoudhary)  for the idea.
+- [Harkirat Singh](https://github.com/hkirat) for motivation.  
 
 ---
 
