@@ -9,11 +9,12 @@ export async function POST(request: Request) {
     const payload = await request.json();
     const { success, error, data } = verifySchema.safeParse(payload);
     if (!success) {
+      const errors = error.errors.map((err) => err.message);
       return Response.json(
         {
           success: false,
           message: "Zod validation error",
-          errors: error.format()._errors,
+          errors,
         },
         { status: 400 }
       );
