@@ -56,13 +56,7 @@ A **Next.js** platform where users can create posts/questions/opinions and share
    ```
 **5. Start MongoDB in a Docker container**:
    ```bash  
-   sudo docker run -d \  
---name anonymous_feedback \  
--e MONGO_INITDB_ROOT_USERNAME=mongoadmin \  
--e MONGO_INITDB_ROOT_PASSWORD=mongopasswd \  
--v mongodb_data:/data/db \  
--p 27017:27017 \  
-mongo  
+   sudo docker run -d -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=mongopasswd -v mongodb_data:/data/db -p 27017:27017 mongo  
    ```
 **6. Set up environment variables**: 
 Create a `.env` file in the root directory and populate it using `.env.example` use your own `API_KEY's`:
