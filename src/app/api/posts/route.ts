@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/models/db.connect";
 import PostModel from "@/models/post.model";
 import { postSchema } from "@/schemas/postSchema";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
 export async function POST(request: Request) {
   await dbConnect();
@@ -45,10 +45,11 @@ export async function POST(request: Request) {
       title,
       description: description || null,
       userId: userId,
-      link: `${process.env.APP_URL}/feedback/${new Types.ObjectId()}`, // Generate link directly
     });
 
     const newPost = await post.save();
+    newPost.link = `${process.env.APP_URL}/feedback/${newPost._id}`;
+    await newPost.save();
 
     return NextResponse.json(
       {

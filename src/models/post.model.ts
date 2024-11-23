@@ -28,7 +28,7 @@ const PostSchema: Schema<IPost> = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
-    link: { type: String, required: true, unique: true },
+    link: { type: String,  unique: true },
     likes: { type: Number, default: 0 },
     dislikes: { type: Number, default: 0 },
     isAcceptingFeedback: { type: Boolean, default: true },
