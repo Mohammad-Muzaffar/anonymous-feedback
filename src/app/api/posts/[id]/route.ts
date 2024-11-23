@@ -33,10 +33,15 @@ export async function GET(request: Request) {
     }
 
     const userId = user._id;
-    const postPromise = PostModel.findOne({ userId, _id: id });
-
-    // Resolve both queries concurrently
-    const [post] = await Promise.all([postPromise]);
+    // Find the post and populate the feedbacks field
+    const post = await PostModel.findOne({ userId, _id: id }).populate({
+      path: "feedbacks", // Populate feedbacks field
+      select: "_id content userToken ipAddress votes sentiment", // Select necessary fields from Feedback
+      populate: {
+        path: "votes", // Populate the votes field inside each feedback
+        select: "voteType", // Select necessary fields from FeedbackVote
+      },
+    });
 
     if (!post) {
       return NextResponse.json(
@@ -45,7 +50,14 @@ export async function GET(request: Request) {
       );
     }
 
-    return NextResponse.json({ success: true, post }, { status: 200 });
+    const feedback = await FeedbackModel.find({
+      postId: id,
+    });
+
+    return NextResponse.json(
+      { success: true, post, feedback },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error while retrieving post:", error);
 
