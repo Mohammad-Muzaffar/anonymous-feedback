@@ -151,4 +151,42 @@ export async function DELETE(request: Request) {
   }
 }
 
-// Get functionality to be created if needed.
+export async function GET(request: Request) {
+  try {
+    await dbConnect();
+
+    const { pathname } = new URL(request.url);
+    const id = pathname.split("/").pop(); // Extract dynamic ID
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: "Post ID not provided." },
+        { status: 400 }
+      );
+    }
+
+    const feedback = await FeedbackModel.findById(id).populate("votes");
+    if (!feedback) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Feedback not found.",
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ success: true, feedback }, { status: 200 });
+  } catch (error) {
+    console.error("Error while updating post:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Error while updating post.",
+        error: error instanceof Error ? error.message : "Unknown error.",
+      },
+      { status: 500 }
+    );
+  }
+}
