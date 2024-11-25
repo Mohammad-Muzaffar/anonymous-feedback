@@ -1,4 +1,4 @@
-![Logo](https://github.com/user-attachments/assets/27a95ea5-c130-4343-b936-99af87077edc)
+# Anonymous Feedback
 
 A **Next.js** platform where users can create posts/questions/opinions and share a unique link to gather honest and anonymous feedback. The platform utilizes analytics powered by **OpenAI models** to provide insights on feedback, enabling users to make informed decisions based on true, unbiased responses.  
 
