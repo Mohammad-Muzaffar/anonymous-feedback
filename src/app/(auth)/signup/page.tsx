@@ -137,16 +137,14 @@ const Page: React.FC = () => {
                       />
                     </FormControl>
                     {isCheckingUsername && <Loader2 className="animate-spin" />}
-                    <FormDescription>
-                      <p
-                        className={`text-sm ${
-                          usernameMessage === "Username is unique."
-                            ? "text-green-500"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {usernameMessage}
-                      </p>
+                    <FormDescription
+                      className={`text-sm ${
+                        usernameMessage === "Username is unique."
+                          ? "text-green-500"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {usernameMessage}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

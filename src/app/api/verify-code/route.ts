@@ -70,7 +70,7 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          message: "Code expired sent new verification code.",
+          message: "Code expired sent new verification code please enter new verification code.",
         },
         { status: 400 }
       );
