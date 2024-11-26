@@ -9,3 +9,9 @@ export const verifySchema = zod.object({
     .string()
     .length(6, { message: "Verification code must be 6 digits." }),
 });
+
+export const verifyCodeSchema = zod.object({
+  code: zod
+    .string()
+    .length(6, { message: "Verification code must be 6 digits." }),
+});

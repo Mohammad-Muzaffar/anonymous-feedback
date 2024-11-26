@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     });
 
     const newPost = await post.save();
-    newPost.link = `${process.env.APP_URL}/feedback/${newPost._id}`;
+    newPost.link = `${process.env.APP_URL}/feedbacks/${newPost._id}`;
     await newPost.save();
 
     return NextResponse.json(
