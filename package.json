@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.2",
     "@react-email/components": "^0.0.28",
     "@types/axios": "^0.14.4",
     "@types/bcrypt": "^5.0.2",
