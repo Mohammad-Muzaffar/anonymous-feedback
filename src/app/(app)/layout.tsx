@@ -1,5 +1,5 @@
 // import Navbar from "@/components/custom/Navbar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/custom/AppSidebar";
 
 export default function RootLayout({
@@ -11,7 +11,9 @@ export default function RootLayout({
     <>
       <SidebarProvider>
         <AppSidebar />
-
+        <div className="visible md:hidden">
+          <SidebarTrigger />
+        </div>
         {children}
       </SidebarProvider>
     </>

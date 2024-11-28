@@ -32,15 +32,15 @@ const PostSchema: Schema<IPost> = new Schema(
     likes: { type: Number, default: 0 },
     dislikes: { type: Number, default: 0 },
     isAcceptingFeedback: { type: Boolean, default: true },
-    feedbacks: [{ type: Schema.Types.ObjectId, ref: "feedbacks" }],
+    feedbacks: [{ type: Schema.Types.ObjectId, ref: "Feedback" }],
     // New fields for analytics
     sentimentSummary: {
       positive: { type: Number, default: 0 },
       neutral: { type: Number, default: 0 },
       negative: { type: Number, default: 0 },
     },
-    mostUpvotedFeedback: { type: Schema.Types.ObjectId, ref: "feedbacks" },
-    mostDownvotedFeedback: { type: Schema.Types.ObjectId, ref: "feedbacks" },
+    mostUpvotedFeedback: { type: Schema.Types.ObjectId, ref: "Feedback" },
+    mostDownvotedFeedback: { type: Schema.Types.ObjectId, ref: "Feedback" },
     commonFeedbackThemes: { type: [String], default: [] },
   },
   {
