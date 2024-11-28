@@ -1,6 +1,52 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export function RecentPosts() {
+  const { toast } = useToast();
+  const [recentPosts, setRecentPosts] = useState([
+    {
+      id: "",
+      title: "Loading your posts...",
+      engagement: 0,
+      sentiment: "",
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get(`/api/dashboard/recent-posts`);
+        if (response.status === 200) {
+          if (response.data.recentPosts.length === 0) {
+            setRecentPosts([
+              {
+                id: "",
+                title: "You don't have any posts.",
+                engagement: 0,
+                sentiment: "",
+              },
+            ]);
+          } else {
+            setRecentPosts(response.data.recentPosts);
+          }
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          toast({
+            title: "Error fetching recent posts",
+            description: error.response?.data.message,
+            variant: "destructive",
+          });
+        } else {
+          console.error(error);
+        }
+      }
+    };
+    fetchStats();
+  }, [toast]);
+
   return (
     <div className="space-y-8">
       {recentPosts.map((post, index) => (
@@ -20,12 +66,3 @@ export function RecentPosts() {
     </div>
   );
 }
-
-const recentPosts = [
-  {
-    id: "1", // id of the post
-    title: "How can we improve our product?",
-    engagement: 24, // No of feedback to this post
-    sentiment: "Positive",
-  },
-];
