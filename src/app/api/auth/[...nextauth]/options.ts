@@ -45,10 +45,6 @@ export const authOptions: NextAuthOptions = {
             throw new Error("User not found.");
           }
 
-          if (!user.isVerified) {
-            throw new Error("User is not verified.");
-          }
-
           const isMatch = await user.comparePassword(
             String(credentials.password)
           );

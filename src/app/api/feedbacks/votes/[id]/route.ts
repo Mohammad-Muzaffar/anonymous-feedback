@@ -127,12 +127,17 @@ export async function POST(request: Request) {
     await newVote.save();
 
     // Step 6: Update feedback model vote count
-    await FeedbackModel.findByIdAndUpdate(id, {
-      $inc:
-        vote === "upvote"
-          ? { "voteCount.upvotes": 1 }
-          : { "voteCount.downvotes": 1 },
-    });
+    await FeedbackModel.findByIdAndUpdate(
+      id,
+      {
+        $inc:
+          vote === "upvote"
+            ? { "voteCount.upvotes": 1 }
+            : { "voteCount.downvotes": 1 },
+        $push: { votes: newVote._id },
+      },
+      { new: true }
+    );
 
     return NextResponse.json(
       { success: true, message: "Vote added successfully.", newVote },

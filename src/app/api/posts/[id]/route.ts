@@ -50,14 +50,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const feedback = await FeedbackModel.find({
-      postId: id,
-    });
-
-    return NextResponse.json(
-      { success: true, post, feedback },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, post }, { status: 200 });
   } catch (error) {
     console.error("Error while retrieving post:", error);
 
