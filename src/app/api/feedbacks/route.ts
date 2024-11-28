@@ -86,6 +86,12 @@ export async function POST(request: Request) {
     });
     const newFeedback = await feedback.save();
 
+    await PostModel.findByIdAndUpdate(
+      postId,
+      { $push: { feedbacks: newFeedback._id } },
+      { new: true }
+    );
+
     const response = NextResponse.json(
       {
         success: true,
