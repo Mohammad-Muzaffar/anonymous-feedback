@@ -52,7 +52,7 @@ export default function DashboardPage() {
         text="Overview of your Anonymous Feedback activity"
       />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="bg-gray-100 text-[#051D39]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Posts</CardTitle>
           </CardHeader>
@@ -63,17 +63,17 @@ export default function DashboardPage() {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="text-[#051D39]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total Feedback
+              Total Feedbacks
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalFeedback}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gray-100 text-[#051D39]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Average Engagement
@@ -86,7 +86,7 @@ export default function DashboardPage() {
         </Card>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="col-span-2 md:col-span-1">
+        <Card className="col-span-2 md:col-span-1 bg-gray-100 text-[#051D39]">
           <CardHeader>
             <CardTitle>Recent Posts</CardTitle>
             <CardDescription>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
             <RecentPosts />
           </CardContent>
         </Card>
-        <Card className="col-span-2 md:col-span-1">
+        <Card className="col-span-2 md:col-span-1 text-[#051D39]">
           <CardHeader>
             <CardTitle>Top Performing Posts</CardTitle>
             <CardDescription>

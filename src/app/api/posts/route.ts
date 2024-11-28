@@ -114,7 +114,7 @@ export async function GET(request: Request) {
       .skip(skip)
       .limit(limit)
       .select(
-        "_id title description likes dislikes isAcceptingFeedback createdAt"
+        "_id title description link likes dislikes isAcceptingFeedback createdAt"
       );
 
     // Count total posts for pagination metadata

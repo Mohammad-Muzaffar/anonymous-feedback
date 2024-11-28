@@ -1,11 +1,10 @@
-import React from 'react'
+"use client";
+import { useParams } from "next/navigation";
+import React from "react";
 
 function PostFeedback() {
-  return (
-    <div>
-      post feedback
-    </div>
-  )
+  const { postId } = useParams();
+  return <div>post feedback</div>;
 }
 
 export default PostFeedback;
