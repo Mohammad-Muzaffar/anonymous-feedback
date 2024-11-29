@@ -29,83 +29,143 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="text-[#051D39]">
       <SidebarHeader className="p-4">
-        <h1
-          className={`text-xl text-center font-bold transition-opacity duration-200 ${
+        <div
+          className={`flex items-center justify-center space-x-4 transition-opacity duration-200 ${
             state === "collapsed" ? "opacity-80" : "opacity-100"
           }`}
         >
-          {state === "expanded" && "Anonymous Feedback"}
-          {state === "collapsed" && (
-            <div className="flex items-center justify-center space-x-4">
-              <Avatar
-                className={`transition-all duration-200 ${
-                  state === "collapsed" ? "h-7 w-7" : "h-10 w-10"
-                }`}
-              >
-                <AvatarFallback>{"AF"}</AvatarFallback>
-              </Avatar>
-            </div>
+          {state === "expanded" && (
+            <h1 className="text-xl font-bold">Anonymous Feedback</h1>
           )}
-        </h1>
+          {state === "collapsed" && (
+            <Avatar
+              className={`transition-all duration-200 ${
+                state === "collapsed" ? "h-7 w-7" : "h-10 w-10"
+              }`}
+            >
+              <AvatarFallback>{"AF"}</AvatarFallback>
+            </Avatar>
+          )}
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Collapse Button */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <a href="#">
                     <SidebarTrigger />
-                    <span className="mr-0">
-                      {state === "expanded" && "Collapse"}
+                    <span
+                      className={`mr-0 transition-opacity duration-200 ${
+                        state === "collapsed" ? "opacity-0" : "opacity-100"
+                      }`}
+                    >
+                      Collapse
                     </span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              {/* Dashboard Link */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/dashboard">
-                    <Home />
-                    <span>Dashboard</span>
+                  <a href="/dashboard" className="flex items-center">
+                    <Home className="mr-2" />
+                    <span
+                      className={`transition-opacity duration-200 ${
+                        state === "collapsed" ? "opacity-0" : "opacity-100"
+                      }`}
+                    >
+                      Dashboard
+                    </span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              {/* Posts Section */}
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <MessageSquare />
-                  <span>Posts</span>
+                <SidebarMenuButton asChild>
+                  <a href="#" className="flex items-center">
+                    <MessageSquare className="mr-2" />
+                    <span
+                      className={`transition-opacity duration-200 ${
+                        state === "collapsed" ? "opacity-0" : "opacity-100"
+                      }`}
+                    >
+                      Posts
+                    </span>
+                  </a>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <a href="/posts/new-post">New Post</a>
+                      <a href="/posts/new-post">
+                        <span
+                          className={`transition-opacity duration-200 ${
+                            state === "collapsed" ? "opacity-0" : "opacity-100"
+                          }`}
+                        >
+                          New Post
+                        </span>
+                      </a>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton asChild>
-                      <a href="/posts">View Previous Posts</a>
+                      <a href="/posts">
+                        <span
+                          className={`transition-opacity duration-200 ${
+                            state === "collapsed" ? "opacity-0" : "opacity-100"
+                          }`}
+                        >
+                          All Posts
+                        </span>
+                      </a>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>
               </SidebarMenuItem>
+              {/* Settings Section */}
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Settings />
-                  <span>Settings</span>
+                <SidebarMenuButton asChild>
+                  <a href="#" className="flex items-center">
+                    <Settings className="mr-2" />
+                    <span
+                      className={`transition-opacity duration-200 ${
+                        state === "collapsed" ? "opacity-0" : "opacity-100"
+                      }`}
+                    >
+                      Settings
+                    </span>
+                  </a>
                 </SidebarMenuButton>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     {!user ? (
                       <SidebarMenuSubButton asChild>
-                        <a href="/signin">
+                        <a href="/signin" className="flex items-center">
                           <LogIn className="mr-2 h-4 w-4" />
-                          <span>Sign in</span>
+                          <span
+                            className={`transition-opacity duration-200 ${
+                              state === "collapsed"
+                                ? "opacity-0"
+                                : "opacity-100"
+                            }`}
+                          >
+                            Sign in
+                          </span>
                         </a>
                       </SidebarMenuSubButton>
                     ) : (
                       <SidebarMenuSubButton onClick={() => signOut()}>
                         <LogOut className="mr-2 h-4 w-4" />
-                        <span>Sign out</span>
+                        <span
+                          className={`transition-opacity duration-200 ${
+                            state === "collapsed" ? "opacity-0" : "opacity-100"
+                          }`}
+                        >
+                          Sign out
+                        </span>
                       </SidebarMenuSubButton>
                     )}
                   </SidebarMenuSubItem>
@@ -133,11 +193,7 @@ export function AppSidebar() {
             }`}
           >
             {state === "expanded" && (
-              <>
-                <p className="text-sm font-medium">
-                  {user?.username || "User"}
-                </p>
-              </>
+              <p className="text-sm font-medium">{user?.username || "User"}</p>
             )}
           </div>
         </div>
