@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const { pathname } = new URL(request.url);
+    const { pathname, searchParams } = new URL(request.url);
     const id = pathname.split("/").pop(); // Extract dynamic ID
 
     if (!id) {
@@ -33,15 +33,11 @@ export async function GET(request: Request) {
     }
 
     const userId = user._id;
+
     // Find the post and populate the feedbacks field
-    const post = await PostModel.findOne({ userId, _id: id }).populate({
-      path: "feedbacks", // Populate feedbacks field
-      select: "_id content userToken ipAddress votes sentiment", // Select necessary fields from Feedback
-      populate: {
-        path: "votes", // Populate the votes field inside each feedback
-        select: "voteType", // Select necessary fields from FeedbackVote
-      },
-    });
+    const post = await PostModel.findOne({ userId, _id: id }).select(
+      "sentimentSummary _id title description likes dislikes isAcceptingFeedback commonFeedbackThemes createdAt link"
+    );
 
     if (!post) {
       return NextResponse.json(
@@ -50,7 +46,30 @@ export async function GET(request: Request) {
       );
     }
 
-    return NextResponse.json({ success: true, post }, { status: 200 });
+    // Handle pagination
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "20", 10);
+    const skip = (page - 1) * limit;
+
+    const totalFeedbacks = await FeedbackModel.countDocuments({ postId: id });
+    const totalPages = Math.ceil(totalFeedbacks / limit);
+
+    const feedbacks = await FeedbackModel.find({ postId: id })
+      .skip(skip)
+      .limit(limit)
+      .populate("votes");
+
+    // Construct the pagination info
+    const pagination = {
+      currentPage: page,
+      totalPages,
+      totalFeedbacks,
+    };
+
+    return NextResponse.json(
+      { success: true, post, feedbacks, pagination },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error while retrieving post:", error);
 
