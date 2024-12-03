@@ -69,19 +69,21 @@ const FeedbackPage: React.FC = () => {
           title: "Feedback Submitted",
           description: "Thank you for your feedback!",
         });
-        localStorage.setItem("auser",response.data.userToken)
+        localStorage.setItem("auser", response.data.userToken);
         router.push(`/public/posts/${postId}`);
       } else {
         throw new Error("Feedback submission failed");
       }
     } catch (error) {
-      console.error(error);
-      toast({
-        variant: "destructive",
-        title: "Submission Failed",
-        description:
-          "There was an error submitting your feedback. Please try again.",
-      });
+      if (axios.isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: "Submission Failed",
+          description: error.response?.data.message,
+        });
+      } else {
+        console.error(error);
+      }
     } finally {
       setIsSubmitting(false);
     }
