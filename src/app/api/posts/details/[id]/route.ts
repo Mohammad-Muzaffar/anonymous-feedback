@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/models/db.connect";
 import PostModel from "@/models/post.model";
+import FeedbackModel from "@/models/feedback.model";
 
 export async function GET(request: Request) {
   try {
     await dbConnect();
 
-    const { pathname } = new URL(request.url);
+    const { pathname, searchParams } = new URL(request.url);
     const id = pathname.split("/").pop(); // Extract dynamic ID
 
     if (!id) {
@@ -28,7 +29,30 @@ export async function GET(request: Request) {
       );
     }
 
-    return NextResponse.json({ success: true, post }, { status: 200 });
+    // Handle pagination
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "20", 10);
+    const skip = (page - 1) * limit;
+
+    const totalFeedbacks = await FeedbackModel.countDocuments({ postId: id });
+    const totalPages = Math.ceil(totalFeedbacks / limit);
+
+    const feedbacks = await FeedbackModel.find({ postId: id })
+      .skip(skip)
+      .limit(limit)
+      .populate("votes");
+
+    // Construct the pagination info
+    const pagination = {
+      currentPage: page,
+      totalPages,
+      totalFeedbacks,
+    };
+
+    return NextResponse.json(
+      { success: true, post, feedbacks, pagination },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error while retrieving post:", error);
 

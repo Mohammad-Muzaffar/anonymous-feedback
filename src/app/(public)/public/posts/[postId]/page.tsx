@@ -1,12 +1,13 @@
+import PostDetails from "@/components/custom/PostDetails";
 
+export default async function PostPage({ params }: { params: { postId: string } }) {
+  // `params.postId` is resolved here
+  const postId = params.postId;
 
-// Todo: Create a component that will reder post and it's feedback and anonymous users can like/dislike posts, upvote/downvote other people feedbacks.
-function Page() {
   return (
-    <div>
-      public posts and feedback page
+    <div className="container mx-auto py-8">
+      {/* Pass resolved postId to your component */}
+      <PostDetails postId={postId} />
     </div>
-  )
+  );
 }
-
-export default Page

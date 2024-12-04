@@ -1,7 +1,9 @@
+import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
-import { v4 as uuid } from "uuid";
 import dbConnect from "@/models/db.connect";
 import PostModel from "@/models/post.model";
+import PostVoteModel from "@/models/postVote.model";
+import { v4 as uuid } from "uuid";
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +19,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { voteType, userToken } = await request.json();
+    const payload = await request.json();
+    const { voteType, userToken } = payload;
 
     if (!["like", "dislike"].includes(voteType)) {
       return NextResponse.json(
@@ -26,8 +29,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Generate a new token for anonymous users if not provided
-    const token = userToken || uuid();
+    const ipAddress =
+      request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1";
 
     // Step 1: Ensure the post exists
     const post = await PostModel.findById(postId);
@@ -38,28 +41,45 @@ export async function POST(request: Request) {
       );
     }
 
-    // Step 2: Check if the user already voted (using userToken as the key in voteTracker)
-    const existingVote = post.voteTracker.get(token);
+    // Step 2: Check for an existing vote
+    const previousVotes = await PostVoteModel.find({ postId });
+    let existingVote = null;
 
+    for (const vote of previousVotes) {
+      if (vote.userToken === userToken) {
+        existingVote = vote;
+        break;
+      }
+
+      const isIpMatch = await bcrypt.compare(ipAddress, vote.ipAddress);
+      if (isIpMatch) {
+        existingVote = vote;
+        break;
+      }
+    }
+
+    // Step 3: Handle existing vote
     if (existingVote) {
-      // If the same vote type, do nothing (idempotent)
-      if (existingVote === voteType) {
+      if (existingVote.voteType === voteType) {
         return NextResponse.json(
           { success: true, message: "Vote already recorded." },
           { status: 200 }
         );
       }
 
-      // Step 3: If the vote type is different, update it
-      const updateField =
-        voteType === "like"
-          ? { likes: 1, dislikes: -1 }
-          : { likes: -1, dislikes: 1 };
+      // Update the vote type
+      existingVote.voteType = voteType;
+      await existingVote.save();
 
-      // Update the post's vote counts
-      post.likes += updateField.likes;
-      post.dislikes += updateField.dislikes;
-      post.voteTracker.set(token, voteType); // Update vote tracker
+      // Adjust post vote counts
+      if (voteType === "like") {
+        post.likes += 1;
+        post.dislikes -= 1;
+      } else {
+        post.likes -= 1;
+        post.dislikes += 1;
+      }
+
       await post.save();
 
       return NextResponse.json(
@@ -68,10 +88,23 @@ export async function POST(request: Request) {
       );
     }
 
-    // Step 4: Record a new vote
+    // Step 4: Create a new vote
+    const hashedIp = await bcrypt.hash(ipAddress, 10);
+    const token = userToken || uuid();
+
+    const newVote = new PostVoteModel({
+      postId,
+      ipAddress: hashedIp,
+      userToken: token,
+      voteType,
+    });
+
+    await newVote.save();
+
+    // Update post vote counts
     if (voteType === "like") post.likes += 1;
     if (voteType === "dislike") post.dislikes += 1;
-    post.voteTracker.set(token, voteType); // Save vote tracker
+
     await post.save();
 
     return NextResponse.json(
@@ -91,3 +124,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

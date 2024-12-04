@@ -14,7 +14,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ThumbsUp, ThumbsDown, Copy } from "lucide-react";
+import {
+  Loader2,
+  ThumbsUp,
+  ThumbsDown,
+  Copy,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
@@ -220,11 +227,11 @@ const PostFeedbackPage = () => {
               <span>{new Date(feedback.createdAt).toLocaleDateString()}</span>
               <div className="flex items-center space-x-4">
                 <span className="flex items-center">
-                  <ThumbsUp className="h-4 w-4 mr-1" />{" "}
+                  <ArrowUp className="mr-2 h-4 w-4" />{" "}
                   {feedback.voteCount.upvotes}
                 </span>
                 <span className="flex items-center">
-                  <ThumbsDown className="h-4 w-4 mr-1" />{" "}
+                  <ArrowDown className="mr-2 h-4 w-4" />{" "}
                   {feedback.voteCount.downvotes}
                 </span>
               </div>

@@ -21,7 +21,6 @@ export interface IPost extends Document {
   mostUpvotedFeedback: Types.ObjectId; // Reference to the most upvoted feedback
   mostDownvotedFeedback: Types.ObjectId; // Reference to the most downvoted feedback
   commonFeedbackThemes: string[]; // List of common themes (e.g., "clarity", "pacing")
-  voteTracker: Map<string, "like" | "dislike">;
 }
 
 const PostSchema: Schema<IPost> = new Schema(
@@ -42,7 +41,6 @@ const PostSchema: Schema<IPost> = new Schema(
     mostUpvotedFeedback: { type: Schema.Types.ObjectId, ref: "Feedback" },
     mostDownvotedFeedback: { type: Schema.Types.ObjectId, ref: "Feedback" },
     commonFeedbackThemes: { type: [String], default: [] },
-    voteTracker: { type: Map, of: String, default: {} }, // Tracks user votes
   },
   {
     timestamps: true,
