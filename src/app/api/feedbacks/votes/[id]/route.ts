@@ -33,8 +33,9 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
-    const { ipAddress, vote } = data;
+    const ipAddress =
+      request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1";
+    const { vote } = data;
     let { userToken } = data;
 
     // Step 1: Find the feedback
