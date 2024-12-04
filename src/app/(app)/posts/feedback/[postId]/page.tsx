@@ -21,6 +21,7 @@ import {
   Copy,
   ArrowUp,
   ArrowDown,
+  Brain,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -69,6 +70,7 @@ const PostFeedbackPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { postId } = useParams();
   const { toast } = useToast();
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const fetchPostAndFeedbacks = async (page: number = 1) => {
     setIsLoading(true);
@@ -130,6 +132,27 @@ const PostFeedbackPage = () => {
       });
   };
 
+  const generateAnalysis = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await axios.post(`/api/analytics/${postId}`, {});
+      if (response.status === 200) {
+        window.location.reload();
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast({
+          title: "Error occured while generating analytics for you feedback.",
+          description: error.response?.data.message,
+          variant: "destructive",
+        });
+      } else {
+        console.error(error);
+      }
+    } finally {
+      setIsGenerating(false);
+    }
+  };
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -215,6 +238,15 @@ const PostFeedbackPage = () => {
               </div>
             </div>
           )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => generateAnalysis()}
+            className="mt-4"
+          >
+            <Brain className="h-4 w-4 mr-2" />
+            {isGenerating ? "Generating....." : "Generate Analysis"}
+          </Button>
         </CardContent>
       </Card>
 

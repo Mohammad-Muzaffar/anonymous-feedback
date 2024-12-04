@@ -39,8 +39,7 @@ export async function GET(request: Request) {
 
     const feedbacks = await FeedbackModel.find({ postId: id })
       .skip(skip)
-      .limit(limit)
-      .populate("votes");
+      .limit(limit);
 
     // Construct the pagination info
     const pagination = {
