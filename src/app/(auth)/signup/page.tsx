@@ -87,7 +87,7 @@ const Page: React.FC = () => {
             response.data?.message ||
             "Successfully registered, please verify your email",
         });
-        router.replace(`/verify/${username}`);
+        router.replace(`/signin`);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

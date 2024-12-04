@@ -116,7 +116,25 @@ const PostsList = () => {
       </div>
     );
   }
-
+  if(!posts || posts.length === 0){
+    return (
+      <div className="container mx-auto px-5 py-4">
+      <h1 className="text-3xl font-bold mb-6">Your Posts</h1>
+      <div className="mb-6">
+        <Input
+          type="text"
+          placeholder="Search posts..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-sm"
+        />
+      </div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        You do not have any posts yet.
+      </div>
+      </div>
+    )
+  }
   return (
     <div className="container mx-auto px-5 py-4">
       <h1 className="text-3xl font-bold mb-6">Your Posts</h1>
