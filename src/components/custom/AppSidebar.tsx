@@ -54,16 +54,9 @@ export function AppSidebar() {
             <SidebarMenu>
               {/* Collapse Button */}
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#">
+                <SidebarMenuButton asChild className="p-0.5">
+                  <a href="#" className="flex justify-start items-center">
                     <SidebarTrigger />
-                    <span
-                      className={`mr-0 transition-opacity duration-200 ${
-                        state === "collapsed" ? "opacity-0" : "opacity-100"
-                      }`}
-                    >
-                      Collapse
-                    </span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -158,14 +151,18 @@ export function AppSidebar() {
                       </SidebarMenuSubButton>
                     ) : (
                       <SidebarMenuSubButton onClick={() => signOut()}>
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span
-                          className={`transition-opacity duration-200 ${
-                            state === "collapsed" ? "opacity-0" : "opacity-100"
-                          }`}
-                        >
-                          Sign out
-                        </span>
+                        <a href="/signin" className="flex items-center">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span
+                            className={`transition-opacity duration-200 ${
+                              state === "collapsed"
+                                ? "opacity-0"
+                                : "opacity-100"
+                            }`}
+                          >
+                            Sign out
+                          </span>
+                        </a>
                       </SidebarMenuSubButton>
                     )}
                   </SidebarMenuSubItem>
