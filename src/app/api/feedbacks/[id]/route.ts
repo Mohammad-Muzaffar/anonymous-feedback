@@ -35,7 +35,10 @@ export async function PUT(request: Request) {
         { status: 400 }
       );
     }
-    const { content, userToken, ipAddress } = data;
+    const ipAddress =
+      request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1";
+
+    const { content, userToken } = data;
 
     const feedback = await FeedbackModel.findById(id);
 
@@ -60,7 +63,7 @@ export async function PUT(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error while updating post:", error);
+    console.error("Error while fetching feedback:", error);
 
     return NextResponse.json(
       {
@@ -100,7 +103,10 @@ export async function DELETE(request: Request) {
         { status: 400 }
       );
     }
-    const { userToken, ipAddress } = data;
+    const ipAddress =
+      request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1";
+
+    const { userToken } = data;
 
     const feedback = await FeedbackModel.findById(id);
     if (!feedback) {
@@ -178,12 +184,12 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ success: true, feedback }, { status: 200 });
   } catch (error) {
-    console.error("Error while updating post:", error);
+    console.error("Error while fetching feedback:", error);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Error while updating post.",
+        message: "Error while fetching feedback.",
         error: error instanceof Error ? error.message : "Unknown error.",
       },
       { status: 500 }

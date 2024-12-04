@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/models/db.connect";
 import PostModel from "@/models/post.model";
 import { feedbackSchema } from "@/schemas/feedbackSchema";
 import { v4 as uuid } from "uuid";
 import FeedbackModel from "@/models/feedback.model";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   await dbConnect();
 
   try {
@@ -25,10 +25,10 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
-    const { postId, content, ipAddress } = parsed.data;
+    const ipAddress =
+      request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1";
+    const { postId, content } = parsed.data;
     let { userToken } = parsed.data;
-
     if (!userToken) {
       userToken = uuid();
     }
@@ -111,12 +111,12 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    console.error("Error while creating post:", error);
+    console.error("Error while creating feedback:", error);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Error while creating post.",
+        message: "Error while creating feedback.",
         error: error instanceof Error ? error.message : "Unknown error.",
       },
       { status: 500 }
