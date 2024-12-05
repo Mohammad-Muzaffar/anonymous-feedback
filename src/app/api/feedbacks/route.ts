@@ -5,6 +5,7 @@ import PostModel from "@/models/post.model";
 import { feedbackSchema } from "@/schemas/feedbackSchema";
 import { v4 as uuid } from "uuid";
 import FeedbackModel from "@/models/feedback.model";
+import requestIp from "request-ip";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
@@ -25,8 +26,13 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    const ipAddress =
-      request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1";
+    const fakeRequest = {
+      headers: Object.fromEntries(request.headers), // Convert Headers into plain object
+    };
+    // Help me with ip address I need client ip address.
+    const ipAddress = requestIp.getClientIp(fakeRequest) || "127.0.0.1";
+    console.log(ipAddress);
+    
     const { postId, content } = parsed.data;
     let { userToken } = parsed.data;
     if (!userToken) {
